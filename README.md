@@ -63,3 +63,11 @@ Test your system with multiple buy/sell orders and verify:
 Goal:
 Focus on clean design, proper use of classes, and correct data handling.
 
+v1:
+- Portfolio handled all logic
+
+v2:
+- Position encapsulates logic
+- Cleaner design
+- Generator usage added
+- this version was the answer given by chatgpt, correcting my code, primarily implementing encapsulation (two buy and sell methods in Position and Portfolio each to handle logic and implementation seperately)
