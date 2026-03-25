@@ -58,21 +58,43 @@ class Portfolio:
         pos.average_price = new_avg
 
         # Update cash
-        self._cash -= total_value
-
-        
-
-            
+        self._cash -= total_value          
 
     def _sell(self, order):
-        pass #logic to execute sell order and update position and cash balance
 
+        symbol = order.symbol
+        if symbol not in self.positions:
+            raise Exception("No existing position to sell")
+
+        pos = self.positions[symbol]
+
+        if order.quantity > pos.quantity:
+            raise Exception("Insufficient quantity to execute the sell order")
+
+        total_value = order.price * order.quantity
+
+        # Update position
+        pos.quantity -= order.quantity
+
+        # Update cash
+        self._cash += total_value
+
+        # If position is fully sold, remove it from the portfolio
+        if pos.quantity == 0:
+            del self.positions[symbol]
 
 #create demo order 
 order1 = Order('AAPL', 'BUY', 150, 100) #buy 100 shares of AAPL at $150
-order2 = Order('GOOG', 'SELL', 2500, 50) #sell 50 shares of GOOG at $2500
+order2 = Order('GOOG', 'BUY', 180, 75) #buy 75 shares of GOOG at $180
+order3 = Order('GOOG', 'SELL', 250, 50) #sell 50 shares of GOOG at $250
 #initialize portfolio
 portfolio = Portfolio()
 #execute orders
 portfolio.execute_order(order1)
 portfolio.execute_order(order2)
+portfolio.execute_order(order3)
+
+#check portfolio status
+print(f"Cash Balance: ${portfolio.cash}")
+for symbol, position in portfolio.positions.items():
+    print(f"Symbol: {symbol}, Quantity: {position.quantity}, Average Price: ${position.average_price}")
